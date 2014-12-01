@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<title>Twiwa</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<!-- On ouvre la fenêtre à la largeur de l'écran -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Intégration du CSS Bootstrap -->
+	<link href="bootstrap/css/bootstrap-theme.css" rel="stylesheet" media="screen">
+	<link href="bootstrap/css/bootstrap.css" rel="stylesheet" media="screen"> 
+</head>
+<body>
+	<div class="row">
+	  <div class="col-md-12" >
+			<nav class="navbar navbar-inverse">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#">Twiwa</a>
+				  </div>
+				<div class="container-fluid">
+				  <ul class="nav navbar-nav">
+					<li class="active"> <a href="#" class="actualise_inp">Accueil</a> </li>
+					<li> <a href="#" class="threads_inp">Threads</a> </li>
+					<li> <a href="http://iwa.waxo.org/TP_IWA_M2C.pdf">Références</a> </li>
+				  </ul>
+				  <form class="navbar-form navbar-right inline-form">
+					<div class="form-group">
+					  <input type="search" class="search input-sm form-control" placeholder="Recherche">
+					  <button type="submit" class="search_inp btn btn-primary btn-sm"><span class="glyphicon glyphicon-eye-open"></span> Chercher</button>
+					</div>
+				  </form>
+				</div>
+				<h4> <font color='#FFFFFF'>&nbsp;Bienvenue sur Twiwa !</font></h4>
+			  </nav>
+	  </div>
+	</div>
+	<div class="row">
+		<!-- Colonne de gauche -->
+		<div class="col-md-3">
+			<!-- Pannel de création de thread-->
+			<div class="panel panel-info">
+			   <div class="panel-heading">
+				  <h3 class="panel-title">Créer un thread</h3>
+			   </div>
+				<div class="input-group">
+					<span class="input-group-addon">+</span>
+					<input type="text"  class="add_message form-control" placeholder="Message à transmettre"></input>
+					<span class="input-group-btn">
+						<button  class="createThread_inp btn btn-primary" type="submit"><span class="glyphicon glyphicon-plus"></span> Créer</button>
+				   </span>
+				</div>
+				<div class="createThread_res"></div>
+			</div>
+			<!-- Pannel de recherche de threads-->
+			<button  class="threads_inp btn btn-primary btn-lg btn-block" type="submit"><span class="glyphicon glyphicon-eye-open"></span> Trouver les threads</button> 
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">Les threads :</h3>
+				</div>
+				<div class="list-group threads_res"></div>
+			</div>
+			<ul class="pager">
+			  <li class="previous"><a class="prevListThread_inp"><span class="glyphicon glyphicon-backward"></span> Précédent</a></li>
+			  <li class="next"><a class="nextListThread_inp">Suivant <span class="glyphicon glyphicon-forward"></span></a></li>
+			</ul>
+		</div>
+		<!-- Colonne centrale -->
+		<div class="col-md-6">
+			<!-- Pannel d'affichage de thread-->
+			<h2><span class="glyphicon glyphicon-bullhorn"></span>  Thread : <span class="nbThread_res "></span></h2>
+			<span class="deleteThread_res"></span>
+			<div class="input-group">
+				<span class="input-group-addon">@</span>
+				<input type="text"  class="nb_thread form-control" placeholder="Numéro du thread"></input>
+				<span class="input-group-btn">
+					<button  class="showThread_inp btn btn-warning " type="submit"><span class="glyphicon glyphicon-refresh"></span> Afficher</button>
+			   </span>
+			</div>
+			<div class="thread_res"></div>
+			<div class="thread_res_button"></div>
+			<!-- Pannel d'ajout de message dans un thread-->
+			<br/><h3>Message :</h3>
+			<div class="input-group">
+				<span class="input-group-addon">Add</span>
+				<input type="text"  class="author form-control" placeholder="Auteur"></input>
+				<input type="text"  class="reply form-control" placeholder="Message" aria-describedby="helpBlock"></input>
+				<span class="input-group-btn">
+				  <button class="reply_inp btn btn-primary" type="submit"><span class="glyphicon glyphicon-share-alt"></span> Envoyer</button>
+               </span>
+			</div>
+			<span class="help-block"><strong> Tips: </strong>Balise pour les images et vidéos</span>
+			<button type="button" class="image_inp btn btn-default">Image</button>
+			<button type="button" class="video_inp btn btn-default">Vidéo</button>
+			<div class="replyThread_res"></div>
+		</div>
+		<!-- Colonne de droite -->
+		<div class="col-md-3" >
+			<!-- Pannel d'images-->
+			<button class="btn btn-info btn-lg btn-block"><span class="glyphicon glyphicon-user"></span><br>Utilisateurs</button>
+			<img  src="http://ekladata.com/4yeYpwiralaqGQBGwiYaMAeuRWo.jpg" height="350" width="315" class="img-circle">
+			<h3 align=center>Panda watching you !</h3>
+		</div>
+	</div>
+	<script src="bootstrap/js/bootstrap.js"></script>
+	<script src="./conf_iwa.js"></script>
+</body>
+</html>
