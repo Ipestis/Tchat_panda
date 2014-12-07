@@ -9,12 +9,19 @@ var server = net.createServer(function(socket) {
     		console.log('Client disconnected');
   	});
 	socket.name = socket.remoteAddress+":"+socket.remotePort;
+	socket.fileName="defaultfileName.txt";
 	socket.setEncoding('utf8');
 	clients.push(socket);
 	console.log('Client connected :'+socket.name);
 	socket.on('data',function(data){
-		var writer = fs.createWriteStream("serverFile.txt");
-		writer.write(data);
+		if(data.indexOf("fileName=")==0){
+			socket.fileName=data.substring(9);
+			console.log("file name changed to "+socket.fileName);
+		}
+		else{
+			var writer = fs.createWriteStream(socket.fileName);
+			writer.write(data);
+		}
 		//console.log(data);
 	})
 
