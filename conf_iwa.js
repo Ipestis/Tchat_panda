@@ -27,15 +27,17 @@ conf_iwa.click = function (ev) {
 	}else if (src.has_class("nextListThread_inp")){
 		conf_iwa.next_listThread();
 	}else if (src.has_class("prevPage_inp")){
-		conf_iwa.prev_page();
+		conf_iwa.prev_pageThread();
 	}else if (src.has_class("nextPage_inp")){
-		conf_iwa.next_page();
+		conf_iwa.next_pageThread();
 	}else if (src.has_class("actualise_inp")){
 		conf_iwa.actualise();
 	}else if (src.has_class("image_inp")){
 		conf_iwa.baliseImage();
 	}else if (src.has_class("video_inp")){
 		conf_iwa.baliseVideo();
+	}else if (src.has_class("title_inp")){
+		conf_iwa.baliseTitre();
 	}
 };
 
@@ -47,6 +49,8 @@ conf_iwa.open_thread = function(src) {
 	var thread = src.getAttribute("data-thread");
 	document.getElementsByClassName("nb_thread")[0].value=thread;
 	conf_iwa.showThread();
+	document.getElementsByClassName("createThread_res")[0].innerHTML= "";
+	conf_iwa.threads();
 };
 
 conf_iwa.cb_threads = function () {
@@ -56,6 +60,7 @@ conf_iwa.cb_threads = function () {
 		data_iwa.threads=donnees;
 		data_iwa.thread_page = 0;
 		data_iwa.thread_page_max = (donnees.length-(donnees.length%10))/10;
+		
 		document.getElementsByClassName("threads_res")[0].innerHTML = "";
 		for(var i = 0; i<donnees.length && i < 10; i++){
 			document.getElementsByClassName("threads_res")[0].innerHTML += "<span class=\"list-group-item thread_id\" data-thread=\""+donnees[i]+"\">"+"Thread : "+donnees[i]+"</span>";
@@ -67,6 +72,7 @@ conf_iwa.prev_listThread = function(){
 	data_iwa.thread_page--;
 	data_iwa.thread_page= (data_iwa.thread_page<0?0:data_iwa.thread_page);
 	var p = data_iwa.thread_page;
+	
 	document.getElementsByClassName("threads_res")[0].innerHTML = "";
 		for(var i = p*10; i<data_iwa.threads.length && i < (p+1)*10; i++){
 			document.getElementsByClassName("threads_res")[0].innerHTML += "<span class=\"list-group-item thread_id\" data-thread=\""+data_iwa.threads[i]+"\">"+"Thread : "+data_iwa.threads[i]+"</span>";
@@ -77,6 +83,7 @@ conf_iwa.next_listThread = function(){
 	data_iwa.thread_page++;
 	data_iwa.thread_page= (data_iwa.thread_page>data_iwa.thread_page_max?data_iwa.thread_page_max:data_iwa.thread_page);
 	var p = data_iwa.thread_page;
+	
 	document.getElementsByClassName("threads_res")[0].innerHTML = "";
 		for(var i = p*10; i<data_iwa.threads.length && i < (p+1)*10; i++){
 			document.getElementsByClassName("threads_res")[0].innerHTML += "<span class=\"list-group-item thread_id\" data-thread=\""+data_iwa.threads[i]+"\">"+"Thread : "+data_iwa.threads[i]+"</span>";
@@ -86,13 +93,25 @@ conf_iwa.next_listThread = function(){
 conf_iwa.cb_showThread = function () {
     if (this.readyState == 4 && this.status == 200) {
 		var data = JSON.parse( this.responseText);
+		
 		document.getElementsByClassName("thread_res")[0].innerHTML = "";
-		document.getElementsByClassName("nbThread_res")[0].innerHTML = "<span data-show-thread=\""+data.id+"\">"+data.id+"    <button  class=\"deleteThread_inp btn btn-danger\" type=\"submit\"><span class=\"glyphicon glyphicon-remove\"></span> Supprimer le thread</button>";
+		document.getElementsByClassName("titleThread_res")[0].innerHTML = "";
+		document.getElementsByClassName("thread_res_button")[0].innerHTML = "";
+		document.getElementsByClassName("nbThread_res")[0].innerHTML = "<span data-show-thread=\""+data.id+"\">"+data.id+"    <button  class=\"btn btn-danger\" type=\"submit\" data-toggle=\"modal\" data-target=\".bs-modal-sm\"><span class=\"glyphicon glyphicon-remove\"></span> Supprimer le thread</button>";
+		
 		data_thread_iwa.messages = [];
 		for(var i = 0; i<data.thread.length; ++i){
 			var message = data.thread[i];
 			var reg = new RegExp("https://", "g");
 			message = message.replace(reg, "//");
+			
+			if(message.search(/\[title\].+\[\/title\]/i ) != -1){
+				var title = message.replace(/.+\[title\]/ ,"[title]");
+				title = title.replace(/\[title\](.+)\[\/title\]/i ,"<h2 align=\"center\" style=\"color: #00006D;\"><strong> $1</strong></h2></br");
+				document.getElementsByClassName("titleThread_res")[0].innerHTML = title;
+				message = message.replace(/\[title\](.+)\[\/title\]/i ," ");
+			}
+			
 			if(message.search(/\[author\].+\[\/author\]/i ) != -1){
 				message = message.replace(/\[author\](.+)\[\/author\]/i ,"<img src=\"https://cdn4.iconfinder.com/data/icons/user-avatar-flat-icons/512/User_Avatar-33-512.png\" height=\"40\" width=\"40\" class=\"img-circle\"><strong> $1</strong></br></br>");
 			}else
@@ -103,18 +122,21 @@ conf_iwa.cb_showThread = function () {
 				message = t;
 				t="";
 				if(message.search(/\[vid\].+\[\/vid\]/i ) != -1)
-					t =  message.replace(/\[vid\](.+)\[\/vid\]/i ,"<iframe width=\"560\" height=\"315\" src=\"$1\" frameborder=\"0\" allowfullscreen></iframe>");
+					t =  message.replace(/\[vid\](.+)\[\/vid\]/i ,"</br><iframe width=\"560\" height=\"315\" src=\"$1\" frameborder=\"0\" allowfullscreen></iframe></br>");
 				if(message.search(/\[img\].+\[\/img\]/i ) != -1)
-					t = message.replace(/\[img\](.+)\[\/img\]/i ,"<img  src=\"$1\"/ height=\"400\" width=\"400\">");
+					t = message.replace(/\[img\](.+)\[\/img\]/i ,"</br><img  src=\"$1\"/ height=\"400\" width=\"400\"></br>");
 			}
 			message = "</br><div class=\"well well-sm\"><p style=\"overflow-wrap:break-word;\">&nbsp;&nbsp;&nbsp;"+message+"</p></div>";
 		
 			data_thread_iwa.messages.push(message);
 		}
+		
+		data_thread_iwa.nbMessage = data_thread_iwa.messages.length;
 		data_thread_iwa.thread_page = 0;
-		data_thread_iwa.thread_page_max = (data_thread_iwa.messages.length-(data_thread_iwa.messages.length%10))/10;
+		data_thread_iwa.thread_page_max = (data_thread_iwa.nbMessage-(data_thread_iwa.nbMessage%10))/10;
+		
 		for(var i = 0; i< data_thread_iwa.messages.length && i < 10; i++){
-			document.getElementsByClassName("thread_res")[0].innerHTML += data_thread_iwa.messages[i];
+			document.getElementsByClassName("thread_res")[0].innerHTML += data_thread_iwa.messages[data_thread_iwa.nbMessage-1-i];
 		}
 		if(data_thread_iwa.messages.length >10){
 			document.getElementsByClassName("thread_res_button")[0].innerHTML = "<ul class=\"pager\"><li class=\"previous\"><a class=\"prevPage_inp\"><span class=\"glyphicon glyphicon-backward\"></span> Page précédente</a></li><li class=\"next\"><a class=\"nextPage_inp\">Page suivante <span class=\"glyphicon glyphicon-forward\"></span></a></li></ul>";
@@ -122,23 +144,25 @@ conf_iwa.cb_showThread = function () {
 	}
 };
 
-conf_iwa.prev_page = function(){
+conf_iwa.prev_pageThread = function(){
 	data_thread_iwa.thread_page--;
 	data_thread_iwa.thread_page= (data_thread_iwa.thread_page<0?0:data_thread_iwa.thread_page);
 	var p = data_thread_iwa.thread_page;
+	
 	document.getElementsByClassName("thread_res")[0].innerHTML = "";
 		for(var i = p*10; i<data_thread_iwa.messages.length && i < (p+1)*10; i++){
-			document.getElementsByClassName("thread_res")[0].innerHTML += data_thread_iwa.messages[i];
+			document.getElementsByClassName("thread_res")[0].innerHTML += data_thread_iwa.messages[data_thread_iwa.nbMessage-1-i];
 		}
 }
 
-conf_iwa.next_page = function(){
+conf_iwa.next_pageThread = function(){
 	data_thread_iwa.thread_page++;
 	data_thread_iwa.thread_page= (data_thread_iwa.thread_page>data_thread_iwa.thread_page_max?data_thread_iwa.thread_page_max:data_thread_iwa.thread_page);
 	var p = data_thread_iwa.thread_page;
+	
 	document.getElementsByClassName("thread_res")[0].innerHTML = "";
 		for(var i = p*10; i<data_thread_iwa.messages.length && i < (p+1)*10; i++){
-			document.getElementsByClassName("thread_res")[0].innerHTML += data_thread_iwa.messages[i];
+			document.getElementsByClassName("thread_res")[0].innerHTML += data_thread_iwa.messages[data_thread_iwa.nbMessage-1-i];
 		}
 }
 
@@ -147,6 +171,7 @@ conf_iwa.cb_createThread = function () {
 		var regexp = new RegExp("[0-9]+","g");
 		var donnees = this.responseText.match(regexp);
         document.getElementsByClassName("createThread_res")[0].innerHTML = "<span class=\"list-group-item thread_id\" data-thread=\""+donnees+"\">"+"ID: "+donnees+"</span>";
+		message = document.getElementsByClassName("add_message")[0].value = "";
     }
 };
 
@@ -160,13 +185,16 @@ conf_iwa.cb_replyThread = function () {
 
 conf_iwa.cb_deleteThread = function () {
     if (this.readyState == 4 && this.status == 200) {
-        document.getElementsByClassName("deleteThread_res")[0].innerHTML = "</br><p class=\"bg-danger\">Thread supprimé</p>";
+        document.getElementsByClassName("deleteThread_res")[0].innerHTML = "<h3 class=\"bg-danger\"><strong>Thread supprimé</strong></h3>";
 		document.getElementsByClassName("thread_res")[0].innerHTML = "";
 		document.getElementsByClassName("nbThread_res")[0].innerHTML = "";
+		document.getElementsByClassName("titleThread_res")[0].innerHTML = "";
+		document.getElementsByClassName("thread_res_button")[0].innerHTML = "";
 		document.getElementsByClassName("nb_thread")[0].value = "";
 		document.getElementsByClassName("author")[0].value = "";
 		document.getElementsByClassName("reply")[0].value = "";
-		setInterval(function () { document.getElementsByClassName("deleteThread_res")[0].innerHTML = "";}, 6000);
+		
+		setInterval(function () { document.getElementsByClassName("deleteThread_res")[0].innerHTML = "";}, 5000);
     }
 };
 
@@ -200,6 +228,7 @@ conf_iwa.reply = function () {
 	var authorMsg = document.getElementsByClassName("author")[0].value;
 	var msgReply = document.getElementsByClassName("reply")[0].value;
 	var date= new Date();
+	
     if (msgReply) {
 		if(authorMsg){
 			var req = "http://tp-iwa.waxo.org/reply_to_thread?id="+replyNbThread+"&info=\[author\]"+authorMsg+", le "+date.toLocaleDateString() +" à "+date.toLocaleTimeString()+"[\/author\]"+msgReply+"&id_log=Ipestis";
@@ -229,6 +258,10 @@ conf_iwa.baliseImage = function () {
 
 conf_iwa.baliseVideo = function () {
 	document.getElementsByClassName("reply")[0].value += "[vid][/vid]";
+};
+
+conf_iwa.baliseTitre = function () {
+	document.getElementsByClassName("add_message")[0].value += "[title][/title]";
 };
 
 conf_iwa.get = function(req, cb) {

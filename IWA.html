@@ -11,27 +11,28 @@
 </head>
 <body>
 	<div class="row">
-	  <div class="col-md-12" >
+		<div class="col-md-12" >
+			<!-- Barre de navigation -->
 			<nav class="navbar navbar-inverse">
 				<div class="navbar-header">
-					<a class="navbar-brand" href="#">Twiwa</a>
-				  </div>
+					<a class="navbar-brand">Twiwa</a>
+				</div>
 				<div class="container-fluid">
 				  <ul class="nav navbar-nav">
 					<li class="active"> <a href="#" class="actualise_inp">Accueil</a> </li>
 					<li> <a href="#" class="threads_inp">Threads</a> </li>
 					<li> <a href="http://iwa.waxo.org/TP_IWA_M2C.pdf">Références</a> </li>
-				  </ul>
-				  <form class="navbar-form navbar-right inline-form">
+				</ul>
+				<form class="navbar-form navbar-right inline-form">
 					<div class="form-group">
-					  <input type="search" class="search input-sm form-control" placeholder="Recherche">
-					  <button type="submit" class="search_inp btn btn-primary btn-sm"><span class="glyphicon glyphicon-eye-open"></span> Chercher</button>
+						<input type="search" class=" nput-sm form-control" placeholder="Recherche">
+						<button type="submit" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-eye-open"></span> Chercher</button>
 					</div>
-				  </form>
+				</form>
 				</div>
 				<h4> <font color='#FFFFFF'>&nbsp;Bienvenue sur Twiwa !</font></h4>
-			  </nav>
-	  </div>
+			</nav>
+		</div>
 	</div>
 	<div class="row">
 		<!-- Colonne de gauche -->
@@ -39,17 +40,20 @@
 			<!-- Pannel de création de thread-->
 			<div class="panel panel-info">
 			   <div class="panel-heading">
-				  <h3 class="panel-title">Créer un thread</h3>
-			   </div>
+					<h3 class="panel-title">Créer un thread</h3>
+				</div>
 				<div class="input-group">
 					<span class="input-group-addon">+</span>
 					<input type="text"  class="add_message form-control" placeholder="Message à transmettre"></input>
 					<span class="input-group-btn">
 						<button  class="createThread_inp btn btn-primary" type="submit"><span class="glyphicon glyphicon-plus"></span> Créer</button>
-				   </span>
+					</span>
 				</div>
 				<div class="createThread_res"></div>
 			</div>
+			<span class="help-block"><strong>&nbsp;Tips: </strong>- Balise pour le titre du thread: <button type="button" class="title_inp btn btn-default">Titre</button>
+			</br>&nbsp;&nbsp;- Cliquer sur le thread créé pour l'afficher</span></br>
+			
 			<!-- Pannel de recherche de threads-->
 			<button  class="threads_inp btn btn-primary btn-lg btn-block" type="submit"><span class="glyphicon glyphicon-eye-open"></span> Trouver les threads</button> 
 			<div class="panel panel-info">
@@ -63,20 +67,42 @@
 			  <li class="next"><a class="nextListThread_inp">Suivant <span class="glyphicon glyphicon-forward"></span></a></li>
 			</ul>
 		</div>
+		
 		<!-- Colonne centrale -->
 		<div class="col-md-6">
 			<!-- Pannel d'affichage de thread-->
-			<h2><span class="glyphicon glyphicon-bullhorn"></span>  Thread : <span class="nbThread_res "></span></h2>
+			<h2><span class="glyphicon glyphicon-bullhorn"></span><strong>  Thread : </strong><span class="nbThread_res "></span></h2>
+			<span class="titleThread_res"></span>
 			<span class="deleteThread_res"></span>
 			<div class="input-group">
 				<span class="input-group-addon">@</span>
 				<input type="text"  class="nb_thread form-control" placeholder="Numéro du thread"></input>
 				<span class="input-group-btn">
 					<button  class="showThread_inp btn btn-warning " type="submit"><span class="glyphicon glyphicon-refresh"></span> Afficher</button>
-			   </span>
+			    </span>
 			</div>
 			<div class="thread_res"></div>
 			<div class="thread_res_button"></div>
+			
+			<!-- Suppression d'un thread / Boite de dialog-->
+			<div class="modal fade bs-modal-sm" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-sm">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+							<h4 class="modal-title">Message: </h4>
+						</div>
+						<div class="modal-body">
+							<p>Supprimer le thread ?</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							<button type="button" class="btn btn-danger deleteThread_inp" data-dismiss="modal">Delete</button>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
+
 			<!-- Pannel d'ajout de message dans un thread-->
 			<br/><h3>Message :</h3>
 			<div class="input-group">
@@ -92,15 +118,19 @@
 			<button type="button" class="video_inp btn btn-default">Vidéo</button>
 			<div class="replyThread_res"></div>
 		</div>
+		
 		<!-- Colonne de droite -->
 		<div class="col-md-3" >
 			<!-- Pannel d'images-->
-			<button class="btn btn-info btn-lg btn-block"><span class="glyphicon glyphicon-user"></span><br>Utilisateurs</button>
 			<img  src="http://ekladata.com/4yeYpwiralaqGQBGwiYaMAeuRWo.jpg" height="350" width="315" class="img-circle">
 			<h3 align=center>Panda watching you !</h3>
 		</div>
 	</div>
+	
+	<!-- Ajout des scripts -->
+	<script src="bootstrap/js/jquery.js"></script>
 	<script src="bootstrap/js/bootstrap.js"></script>
 	<script src="./conf_iwa.js"></script>
+	
 </body>
 </html>
